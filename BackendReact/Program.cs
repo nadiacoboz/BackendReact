@@ -31,6 +31,15 @@ namespace Server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            //Add CORS policy!!
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowLocalhost", 
+                    policy => policy.WithOrigins("http://localhost:5173")
+                           .AllowAnyMethod()
+                           .AllowAnyHeader());
+            }); 
+
             var app = builder.Build();
 
             // Modification: Add seed an ensure migration
@@ -49,6 +58,8 @@ namespace Server
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowLocalhost");
 
             app.UseAuthorization();
 
